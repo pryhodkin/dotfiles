@@ -3,3 +3,5 @@
 [user]
 	email = 48391393+pryhodkin@users.noreply.github.com
 	name = Yaroslav Prykhodko
+[push]
+	autoSetupRemote = true
