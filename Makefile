@@ -40,8 +40,11 @@ terminal: $(TERMINAL_THEME).terminal $(ZSHRC) $(ZSH_HOME)
 	 || $(log_error) "failed to reconfigure $(terminal_colored) $(failure)"
 
 update-completions-repo:
+	$(log_info) "updating $(zsh_colored) completions"
+	mkdir -p ./.zsh/git && \
+	curl -o ./.zsh/git/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash && \
+	curl -o ./.zsh/git/.git-prompt.sh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh && \
 	mkdir -p ./.zsh/functions && \
-	curl -o ./.zsh/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash && \
 	curl -o ./.zsh/functions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh \
 	 && $(log_success) "$(zsh_colored) completions were updated successfully! Don't forget to commit $(success)" \
 	 || $(log_error) "failed to update $(zsh_colored) completions $(failure)"
