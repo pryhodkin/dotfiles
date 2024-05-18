@@ -1,6 +1,6 @@
 .ONESHELL:
 .SILENT:
-.PHONY: help all brew terminal keyboard ssh-key ssh-key-copy git
+.PHONY: help all brew terminal update-completions-repo keyboard ssh-key ssh-key-copy git
 
 include visual.mk
 
@@ -28,9 +28,10 @@ $(BREW):
 
 # Terminal
 ZSHRC          := $(HOME)/.zshrc
+ZSH_HOME       := $(HOME)/.zsh
 TERMINAL_THEME := vs-code-atom
 
-terminal: $(TERMINAL_THEME).terminal $(ZSHRC)
+terminal: $(TERMINAL_THEME).terminal $(ZSHRC) $(ZSH_HOME)
 	$(log_info) "reconfiguring $(terminal_colored)..."
 	open "$(TERMINAL_THEME).terminal" && \
 	defaults write com.apple.Terminal "Default Window Settings" -string "$(TERMINAL_THEME)" && \
@@ -38,11 +39,24 @@ terminal: $(TERMINAL_THEME).terminal $(ZSHRC)
 	 && $(log_success) "$(terminal_colored) was reconfigured successfully! $(success)" \
 	 || $(log_error) "failed to reconfigure $(terminal_colored) $(failure)"
 
+update-completions-repo:
+	mkdir -p ./.zsh/functions && \
+	curl -o ./.zsh/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash && \
+	curl -o ./.zsh/functions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh \
+	 && $(log_success) "$(zsh_colored) completions were updated successfully! Don't forget to commit $(success)" \
+	 || $(log_error) "failed to update $(zsh_colored) completions $(failure)"
+
 $(ZSHRC): ./.zshrc
 	$(log_info) "$(zsh_colored) config changed since the last update, updating..."
 	cp ./.zshrc $(ZSHRC) \
 	 && $(log_success) "$(zsh_colored) config update succeed! $(success)" \
 	 || $(log_error) "failed to update $(zsh_colored) config $(failure)"
+
+$(ZSH_HOME): $(wildcard ./.zsh/*)
+	$(log_info) "Updating $(zsh_colored) completions..."
+	cp -r ./.zsh $(HOME) \
+	 && $(log_success) "$(zsh_colored) completions updated successfully! $(success)" \
+	 || $(log_error) "failed to update $(zsh_colored) completions $(failure)"
 ###
 
 
