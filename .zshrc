@@ -7,7 +7,7 @@ alias egrep='egrep --color=auto'
 zstyle ':completion:*:*:git:*' script ~/.zsh/git/.git-completion.bash
 fpath=(~/.zsh/funstions $fpath)
 autoload -Uz compinit && compinit
-. ~/.zsh/git/.git-prompt.sh
+source ~/.zsh/git/.git-prompt.sh
 
 # prompts
 setopt PROMPT_SUBST

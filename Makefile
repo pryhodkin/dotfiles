@@ -64,11 +64,20 @@ $(ZSH_HOME): $(wildcard ./.zsh/*)
 
 
 # Apple stupid keyboard setup fixes
-keyboard:
+LAYOUTS_DIR      := $(HOME)/Library/Keyboard\ Layouts
+UKRAINIAN_LAYOUT := $(LAYOUTS_DIR)/Ukrainian\ -\ PC.bundle
+
+keyboard: $(UKRAINIAN_LAYOUT)
 	$(log_info) "configuring some $(keyboard_colored) features..."
 	defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false \
 	 && $(log_success) "$(keyboard_colored) features was reconfigured successfully! $(success)" \
 	 || $(log_error) "failed to configure $(keyboard_colored) features $(failure)"
+
+$(UKRAINIAN_LAYOUT): $(LAYOUTS_DIR)
+	$(log_info) "Setting up $(ukrainian_layout_colored)..."
+	tar -xzf "./UkrainianLayout.tgz" -C $(LAYOUTS_DIR) --strip-components=1 \
+	 && $(log_success) "$(ukrainian_layout_colored) set up successfully! $(success)" \
+	 || $(log_error) "failed to set up $(ukrainian_layout_colored) $(failure)"
 ###
 
 

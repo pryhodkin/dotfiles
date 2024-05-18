@@ -19,12 +19,13 @@ reset           := \033[0m
 
 
 # colored tool names
-zsh_colored      := $(bright_blue)zsh$(reset)
-homebrew_colored := $(bright_blue)🍻Homebrew$(reset)
-terminal_colored := $(bright_blue)terminal$(reset)
-keyboard_colored := $(bright_blue)keyboard$(reset)
-ssh_key_colored  := $(bright_blue)SSH key$(reset)
-git_colored      := $(bright_blue)git$(reset)
+zsh_colored              := $(bright_blue)zsh$(reset)
+homebrew_colored         := $(bright_blue)🍻Homebrew$(reset)
+terminal_colored         := $(bright_blue)terminal$(reset)
+keyboard_colored         := $(bright_blue)keyboard$(reset)
+ukrainian_layout_colored := $(bright_blue)ukrainian$(reset) $(bright_yellow)layout$(reset)
+ssh_key_colored          := $(bright_blue)SSH key$(reset)
+git_colored              := $(bright_blue)git$(reset)
 
 # logging
 log_info    := echo "$(blue)→$(reset)"
