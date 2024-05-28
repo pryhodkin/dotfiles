@@ -10,19 +10,26 @@ help:
 	$(log_info) "This Makefile is a tool to configure MacOS $(success)"
 	$(new_line)
 
-all: brew terminal keyboard ssh-key git
+all: brew brew-pkgs terminal keyboard ssh-key git
 
 
 # HomeBrew
 BREW := /usr/local/bin/brew
 
-brew: $(BREW)
+brew: $(BREW) brew-pkgs
 
 $(BREW):
 	$(log_info) "installing $(homebrew_colored)..."
 	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
 	 && $(log_success) "$(homebrew_colored) installed successfully! $(success)" \
 	 || $(log_error) "failed to install $(homebrew_colored) $(failure)"
+
+brew-pkgs: $(BREW) brew.pkgs
+	$(log_info) "installing $(homebrew_colored) packages..."
+	 brew install $$(cat brew.pkgs | tr "\n" " ") \
+	 && $(log_success) "$(homebrew_colored) packages installed successfully! $(success)" \
+	 || $(log_error) "failed to install $(homebrew_colored) packages $(failure)"
+
 ###
 
 
@@ -73,9 +80,13 @@ keyboard: $(UKRAINIAN_LAYOUT)
 	 && $(log_success) "$(keyboard_colored) features was reconfigured successfully! $(success)" \
 	 || $(log_error) "failed to configure $(keyboard_colored) features $(failure)"
 
-$(UKRAINIAN_LAYOUT): $(LAYOUTS_DIR)
+## Custom ukrainian layout
+## Apple default layouts have some downsides like unability to type / symbol
+## This is more windows like
+$(UKRAINIAN_LAYOUT): $(LAYOUTS_DIR) UkrainianLayout.tgz
 	$(log_info) "Setting up $(ukrainian_layout_colored)..."
-	tar -xzf "./UkrainianLayout.tgz" -C $(LAYOUTS_DIR) --strip-components=1 \
+	tar -xzf "./UkrainianLayout.tgz" -C $(LAYOUTS_DIR) --strip-components=1 && \
+	defaults write com.apple.HIToolbox AppleEnabledInputSources -array-add '{ "InputSourceKind" = "Keyboard Layout"; "KeyboardLayout ID" = 5161; "KeyboardLayout Name" = "Ukrainian - PC"; }' \
 	 && $(log_success) "$(ukrainian_layout_colored) set up successfully! $(success)" \
 	 || $(log_error) "failed to set up $(ukrainian_layout_colored) $(failure)"
 ###
@@ -92,7 +103,7 @@ ssh-key-copy: $(SSH_KEY_FILE).pub
 	 || $(log_error) "failed to copy $(ssh_key_colored) $(failure)"
 
 $(SSH_KEY_FILE) $(SSH_KEY_FILE).pub:
-	$(log_info) "genereting $(ssh_key_colored)..."
+	$(log_info) "generating $(ssh_key_colored)..."
 	ssh-keygen -t ed25519 -C "$$(whoami)@$$(hostname)" -f "$(SSH_KEY_FILE)" \
 	 && $(log_success) "$(ssh_key_colored) were generated successfully! $(success)" \
 	 || $(log_error) "failed to generate $(ssh_key_colored) $(failure)"
