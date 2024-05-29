@@ -1,6 +1,6 @@
 .ONESHELL:
 .SILENT:
-.PHONY: help all brew terminal update-completions-repo keyboard ssh-key ssh-key-copy git
+.PHONY: help all brew brew-casks brew-formulae terminal update-completions-repo keyboard ssh-key ssh-key-copy git
 
 include visual.mk
 
@@ -10,7 +10,7 @@ help:
 	$(log_info) "This Makefile is a tool to configure MacOS $(success)"
 	$(new_line)
 
-all: brew brew-pkgs terminal keyboard ssh-key git
+all: brew brew-casks brew-formulae terminal update-completions-repo keyboard ssh-key git
 
 
 # HomeBrew
