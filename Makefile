@@ -16,7 +16,7 @@ all: brew brew-pkgs terminal keyboard ssh-key git
 # HomeBrew
 BREW := /usr/local/bin/brew
 
-brew: $(BREW) brew-pkgs
+brew: $(BREW) brew-formulae brew-casks
 
 $(BREW):
 	$(log_info) "installing $(homebrew_colored)..."
@@ -24,12 +24,17 @@ $(BREW):
 	 && $(log_success) "$(homebrew_colored) installed successfully! $(success)" \
 	 || $(log_error) "failed to install $(homebrew_colored) $(failure)"
 
-brew-pkgs: $(BREW) brew.pkgs
-	$(log_info) "installing $(homebrew_colored) packages..."
-	 brew install $$(cat brew.pkgs | tr "\n" " ") \
-	 && $(log_success) "$(homebrew_colored) packages installed successfully! $(success)" \
-	 || $(log_error) "failed to install $(homebrew_colored) packages $(failure)"
+brew-casks: $(BREW) brew-casks.txt
+	$(log_info) "installing $(homebrew_colored) casks..."
+	 brew install --casks $$(cat brew-casks.txt | tr "\n" " ") \
+	 && $(log_success) "$(homebrew_colored) casks installed successfully! $(success)" \
+	 || $(log_error) "failed to install $(homebrew_colored) casks $(failure)"
 
+brew-formulae: $(BREW) brew-formulae.txt
+	$(log_info) "installing $(homebrew_colored) formulae..."
+	 brew install --formulae $$(cat brew-formulae.txt | tr "\n" " ") \
+	 && $(log_success) "$(homebrew_colored) formulae installed successfully! $(success)" \
+	 || $(log_error) "failed to install $(homebrew_colored) formulae $(failure)"
 ###
 
 

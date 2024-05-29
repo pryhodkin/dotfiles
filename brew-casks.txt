@@ -1,0 +1,4 @@
+microsoft-remote-desktop
+skype
+telegram-desktop
+visual-studio-code
